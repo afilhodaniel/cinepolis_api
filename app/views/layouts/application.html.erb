@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app="RailsApp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>RailsApp</title>
+    
+    <%= csrf_meta_tags %>
+    
+    <%= stylesheet_link_tag '/vendor/bootstrap/dist/css/bootstrap.min.css' %>
+    <%= stylesheet_link_tag '/vendor/font-awesome/css/font-awesome.min.css' %>
+    <%= stylesheet_link_tag 'application' %>
+  </head>
+  <body ng-controller="AppController">
+    
+    <%= yield %>
+    
+    <% if Rails.env.development? %>
+      <%= javascript_include_tag 'http://localhost:35729/livereload.js' %>
+    <% end %>
+    
+    <%= javascript_include_tag '/vendor/jquery/dist/jquery.min.js' %>
+    <%= javascript_include_tag '/vendor/angular/angular.min.js' %>
+    <%= javascript_include_tag '/vendor/bootstrap/dist/js/bootstrap.min.js' %>
+    <%= javascript_include_tag 'application' %>
+  </body>
+</html>

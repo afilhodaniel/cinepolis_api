@@ -1,0 +1,1 @@
+var APP_NAME;APP_NAME="RailsApp",window[APP_NAME]=angular.module("RailsApp",[]);
