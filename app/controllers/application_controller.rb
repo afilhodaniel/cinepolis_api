@@ -1,15 +1,17 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
+  before_action :force_authentication, except: [:index]
+
   def index
     render :index
   end
 
   private
 
-    def force_authenticattion
+    def force_authentication
       if !is_authenticated
-        redirect_to root_path
+        redirect_to sessions_unauthenticated_path
       end
     end
 

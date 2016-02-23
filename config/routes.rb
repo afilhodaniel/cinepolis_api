@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root 'application#index'
 
   namespace :sessions do
+    get  '/unauthenticated', action: :unauthenticated
     post '/signin',  action: :signin
     get  '/signout', action: :signout
   end

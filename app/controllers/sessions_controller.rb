@@ -1,5 +1,9 @@
 class SessionsController < ApplicationController
-  skip_before_action :force_authentication, only: [:signin]
+  skip_before_action :force_authentication, only: [:unauthenticated, :signin]
+
+  def unauthenticated
+    render :unauthenticated
+  end
 
   def signin
     user = User.where(email: sessions_params[:email], password: encrypt_password(sessions_params[:password])).first

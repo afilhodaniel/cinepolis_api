@@ -1,1 +1,1 @@
-var APP_NAME;APP_NAME="RailsApp",window[APP_NAME]=angular.module("RailsApp",[]);
+this.APP_NAME="RailsApp",this.window[APP_NAME]=angular.module(APP_NAME,[]);

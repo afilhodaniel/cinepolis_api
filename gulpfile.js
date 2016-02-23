@@ -6,12 +6,13 @@ var gulp = require('gulp'),
     buffer = require('vinyl-buffer'),
     merge = require('merge-stream'),
     uglify = require('gulp-uglify'),
-    csso = require('gulp-csso');
+    csso = require('gulp-csso'),
+    gutil = require('gulp-util');
 
 var HTML_DIR = 'app/views/**/*.html.erb',
     SCSS_DIR = 'app/assets/stylesheets/scss/**/*.scss',
     CSS_DIR = 'app/assets/stylesheets/**/*.css',
-    COFFEE_DIR = 'app/assets/javascripts/coffee/**/*.coffee',
+    COFFEE_DIR = 'app/assets/coffeescripts/**/*.coffee',
     JS_DIR = 'app/assets/javascripts/**/*.js',
     SPRITES_DIR = 'app/assets/images/sprites/**/*.png';
 
@@ -28,7 +29,7 @@ gulp.task('html', function() {
 
 gulp.task('scss', function() {
   return gulp.src(SCSS_DIR)
-    .pipe(scss())
+    .pipe(scss().on('error', scss.logError))
     .pipe(gulp.dest('app/assets/stylesheets'));
 });
 
@@ -41,7 +42,7 @@ gulp.task('csso', function() {
 
 gulp.task('coffee', function() {
   return gulp.src(COFFEE_DIR)
-    .pipe(coffee({bare: true}))
+    .pipe(coffee({bare: true})).on('error', gutil.log)
     .pipe(gulp.dest('app/assets/javascripts'));
 });
 
