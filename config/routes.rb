@@ -13,7 +13,7 @@ Rails.application.routes.draw do
 
       resources :movies, only: [:index, :show]
       resources :cities, only: [:index]
-      resources :movie_theaters, only: [:index]
+      resources :movie_theaters, only: [:index, :show]
     end
   end
 end
