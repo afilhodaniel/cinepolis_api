@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:index, :show, :create, :update, :destroy]
 
-      resources :movies, only: [:index]
+      resources :movies, only: [:index, :show]
       resources :cities, only: [:index]
       resources :movie_theaters, only: [:index]
     end
