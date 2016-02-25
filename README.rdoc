@@ -1,149 +1,191 @@
-== README
+== Cinépolis API
 
-<b>rails_app</b> é apenas um projeto Rails com algumas configurações e funcionalidades já implementadas.
+Este é um projeto de código aberto que tem como objetivo manter uma API simples e funcional para que aplicações diversas possam consumir a programação de salas e horários de filmes em cartaz do Cinépolis, uma das maiores redes de cinema do país.
 
-=== Requerimentos e configurações recomendadas
+Tudo o que você precisa saber é que o projeto foi desenvolvido com Rails e é basicamente um parser do site oficial do {Cinépolis}[http://www.cinepolis.com.br]. Então, acabei usando uma boa dose da fantástica gem {Nokogiri}[http://www.nokogiri.org/] e também um pouquinho da {HTTParty}[https://github.com/jnunemaker/httparty].
+
+Caso queira ver a API em ação, acesse: {https://cinepolisapi.heroku.com}[https://cinepolisapi.heroku.com]. Sinta-se livre para contribuir como quiser. Toda ajuda será bem-vinda!
+
+=== Recomendado
 
 * Ruby 2.3.0 ou superior
 * Rails 4.2.5.1
-* {ImageMagick}[http://www.imagemagick.org/]
-* {Node.js}[https://nodejs.org]
-* {Gulp.js}[http://gulpjs.com/]
-* {Bower}[http://bower.io/]
 
 === Iniciando
 
-Baixe este repositório:
+Clone este repositório:
 
-  git clone git@github.com:afilhodaniel/rails_app
+  git clone git@github.com:afilhodaniel/cinepolis_api
 
-Instale todas as dependências nencessárias
-
-  sudo npm install
-  bower install
-
-Rode o Gulp.js:
+Instale as dependências necessárias:
   
-  gulp
+  bundle install
 
-=== Restful API
+=== Requisições
 
-O projeto conta com uma API Restful totalmente funcional e versionada, que pode ser evoluída ou substituída conforme as necessidades do seu projeto. Um modelo de usuário também já está configurado como recurso desta API.
+<b>GET /api/v1/cities.json</b>
 
-Vale a pena ressaltar que esta API só responde requisições feitas em JSON.
+Retorna um JSON com todas as cidades e suas unidades de cinema. Exemplo:
 
-<b>Rotas</b>
-
-Por padrão, apenas os métodos <b>index</b>, <b>show</b>, <b>create</b>, <b>update</b> e <b>destroy</b> estarão disponíveis para qualquer recurso controlado pela API.
-
-Crie novas rotas adicionando e/ou aninhando recursos no seu arquivo <b>config/routes.rb</b>:
-
-  namespace :api do
-    namespace :v1 do
-      resources :users, only: [:index, :show, :create, :update, :destroy]
-    end
-  end
-
-Todas as rotas seguem o padrão abaixo (exceto rotas aninhadas):
-
-* GET /api/v1/users.json
-* POST /api/v1/users.json
-* GET /api/v1/users/:id.json
-* PUT/PATCH /api/v1/users/:id.json
-* DELETE /api/v1/users/:id.json
-  
-<b>Controladores</b>
-
-Crie novos controladores dentro do diretório <b>app/controllers/api/v1</b> e estenda a classe <b>BaseController</b>. Veja o arquivo <b>users_controllers.rb</b> como exemplo:
-
-  module Api
-    module V1
-      class UsersControllers < BaseController
-        ...
-        private
-          def users_params
-            ...
-          end
-          
-          def query_params
-            ...
-          end
-      end
-    end
-  end
-  
-Todo controlador deve conter o método privado <b><i>resources</i>_params</b> (onde <i>resources</i> é o nome no plural do recurso que está sendo configurado), podendo ou não conter o método privado <b>query_params</b>.
-
-  private
-    def users_params
-      params.require(:user).permit(:avatar, :name, :bio, :username, :email, :password)
-    end
-    
-    def query_params
-      params.permit(:id, :username, :email)
-    end
-
-<b>users_params</b>, neste caso, é utilizado para permitir os parâmetros <i>params[:user][:avatar]</i>, <i>params[:user][:name]</i> e assim por diante, nos métodos <b>create</b> e <b>update</b>.
-
-<b>query_params</b>, pode ser usado para criar uma filtragem de resultados no método <b>index</b>.
-
-<b>Paginando resultados</b>
-
-Estamos utilizando a gem {kaminari}[https://github.com/amatsuda/kaminari] para paginar resultados no método <b>index</b>.
-
-Para paginar resultados, utilize na requisição:
-
-* GET /api/v1/users.json?page=1&page_size=5
-
-E na <i>query</i> da consulta, faça algo como:
-
-  User.all.page(params[:page]).per(:page_size)
-
-Para mais informações, visite a página do projeto.
-
-<b>Respondendo outros formatos</b>
-
-Esta API só responde requisiões do tipo JSON. Para alterar ou adicionar um novo formato de resposta, altere os métodos <b>index</b>, <b>show</b>, <b>create</b>, <b>update</b> e <b>destroy</b> da classe localizada em <b>app/controllers/api/v1/base_controller.rb</b>
-
-  respond_to do |format|
-    format.json { render :index }
-  end
-
-Qualquer requisição de outro formato não configurado, feita a um recurso da API, gerará um erro de formato desconhecido.
-
-=== Sessões de usuário
-
-Além da API Restful, este projeto também conta com um sistema de autenticação baseado em login de usuários. Logo, todos os métodos, tanto da API como de outros controladores herdarão uma ação que força a autenticação do usuário, exceto dois métodos já configurados:
-
-* POST /api/v1/users.json
-* GET /
-
-O primeiro não está protegido por autenticação porque é o responsável por permitir a criação de novos usuários dentro da aplicação.
-
-O segundo, está parcialmente protegido. Isto quer dizer que, para usuários logados e não logados, os templates renderizados são diferentes. O template <b>app/views/application/index.html.erb</b> é renderizado quando o usuário não está logado, enquanto o template <b>app/views/application/home.html.erb</b> é renderizado quando o usuário está logado.
-
-Você pode alterar esse comportamento conforme desejar, apenas alterando as classes <b>ApplicationController</b> e <b>BaseController</b>, localizadas em <b>app/controllers</b>.
-
-<b>Rotas</b>
-
-Para logar um usuário na sessáo, utilize a rota:
-
-* POST /sessions/signin.json
-
-E monte a requisição dessa maneira:
-
-  user: {
-    email: "user@sample.com",
-    password: "pass123"
+  {
+    cities: [
+      {
+        id: "8",
+        name: "Barueri - SP",
+        movie_theaters: [
+          {
+            id: "8",
+            name: "Cinépolis Iguatemi Alphaville",
+            url: "http://localhost:3000/api/v1/movie_theaters/8.json"
+          },
+          {
+            id: "22",
+            name: "Cinépolis Parque Barueri",
+            url: "http://localhost:3000/api/v1/movie_theaters/22.json"
+          }
+        ]
+      },
+      ...
+    ]
   }
 
-Para deslogar um usuário da sessão, utilize a rota:
-* GET /sessions/signout
+<b>GET /api/v1/movie_theaters.json</b>
 
-<b>Usuário atual da sessão</b>
+Retorna um JSON com todas as unidades de cinema. Exemplo:
 
-Em qualquer controlador ou view que herde direta ou indiretamente a classe<b>ApplicationController</b>, você tem a variável de instância <b>@current_user</b>, que contém todas as informações do usuário atual da sessão.
+  {
+    movie_theaters: [
+      {
+        id: "8",
+        name: "Cinépolis Iguatemi Alphaville"
+        city: {
+          id: "8",
+          name: "Barueri - SP"
+        },
+        url: "http://localhost:3000/api/v1/movie_theaters/8.json"
+      },
+      {
+        id: "22",
+        name: "Cinépolis Parque Barueri",
+        city: {
+          id: "8",
+          name: "Barueri - SP"
+        },
+        url: "http://localhost:3000/api/v1/movie_theaters/22.json"
+      },
+      ...
+    ]
+  }
 
-=== Outras observações
+<b>GET /api/v1/movie_theaters/:id.json</b>
 
-* Estamos usando a gem {paperclip}[https://github.com/thoughtbot/paperclip] para adicionar a funcionalidade de upload de arquivos
+Retorna um JSON com a programação completa de salas e horários da unidade de cinema em questão. Exemplo:
+
+  {
+    success: true,
+    movie_theater: {
+      name: "Cinépolis Parque Barueri",
+      city: "Barueri-SP",
+      weeks: [
+        {
+          from: "18/02",
+          to: "24/02/2016",
+          sessions: [
+            {
+              room: "1",
+              movie: {
+                name: "Deadpool",
+                url: "http://localhost:3000/api/v1/movies/7160.json",
+                pg: "16",
+                subtitled: false,
+                dubbed: true
+              },
+              hours: [
+                "13h35",
+                "16h15",
+                "19h00",
+                "21h45"
+              ]
+            },
+            ...
+          ]
+        },
+        ...
+      ]
+    }
+  }
+
+<b>GET /api/v1/movies.json</b>
+
+Retorna um JSON com todos os filmes em cartaz. Exemplo:
+
+  {
+    movies: [
+      {
+        id: "7400",
+        name: "13 Horas: Os Soldados Secretos de Benghazi",
+        url: "http://localhost:3000/api/v1/movies/7400.json",
+      },
+      {
+        id: "7142",
+        name: "A 5ª Onda",
+        url: "http://localhost:3000/api/v1/movies/7142.json"
+      },
+      ...
+    ]
+  }
+
+<b>GET /api/v1/movies/:id.json</b>
+
+Retorna um JSON com todas as informações sobre o filme em questão e a programação completa de salas e horários de todas as unidades de cinema em que o filme está sendo exibido, organizada por cidade. Exemplo:
+
+  {
+    success: true,
+    movie: {
+      id: "7400",
+      image: "http://www.claquete.com/fotos/filmes/poster/7400_medio.jpg",
+      trailer: "http://www.youtube.com/embed/aLKSUIXYE14",
+      name: "13 Horas: Os Soldados Secretos de Benghazi",
+      original_name: "13 Hours: The Secret Soldiers of Benghazi, 2015",
+      pg: "14",
+      sinopse: "O longa retratará o ataque terrorista que vitimou o embaixador dos Estados Unidos na Líbia em setembro de 2012, sob o ponto de vista de um oficial, vivido por John Krasinski, do grupo de elite da Marinha dos Estados Unidos.",
+      cast: "John Krasinski, Dominic Fumusa, James Badge Dale, Max Martini, Pablo Schreiber, Alexia Barlier, David Costabile, Peyman Moaadi",
+      director: "Michael Bay",
+      cities: [
+        {
+          city: "Barueri-SP",
+          movie_theaters: [
+            {
+              name: "Cinépolis Iguatemi Alphaville",
+              url: "http://localhost:3000/api/v1/movie_theaters/8.json",
+              sessions: [
+                {
+                  room: "1",
+                  subtitled: true,
+                  dubbed: false,
+                  macroxe: false,
+                  vip: false,
+                  4dx: false,
+                  2d: false,
+                  hours: [
+                    "15h00",
+                    "18h15",
+                    "21h30"
+                  ]
+                },
+                ...
+              ]
+            },
+            ...
+          ]
+        },
+        ...
+      ]
+    }
+  }
+
+=== Observações
+
+1. Você pode usar este projeto como bem entender. Mas sugiro não usar o deploy do Heroku citado mais acima. Trata-se de um deploy que eu fiz apenas para demonstrar o funcionamento da API. Faça seu próprio deploy, em um servidor profissional.
+
+2. Caso queria entender melhor sobre a estrutura do projeto, acesse: {https://github.com/afilhodaniel/rails_app}[https://github.com/afilhodaniel/rails_app]
