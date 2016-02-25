@@ -20,6 +20,11 @@ group :development, :test do
   gem 'byebug'
 end
 
+group :production do
+  gem 'rails_12factor'
+  gem 'pg'
+end
+
 group :development do
   gem 'sqlite3'
   gem 'dotenv'
