@@ -50,7 +50,8 @@ module Api
             if option.attr('value') != '0'
               movie_theater = {
                 id: option.attr('value'),
-                name: option.text
+                name: option.text,
+                url: "#{request.protocol}#{request.host}:#{request.port}#{api_v1_movie_theater_path(option.attr('value'), format: :json)}"
               }
 
               movie_theaters << movie_theater
