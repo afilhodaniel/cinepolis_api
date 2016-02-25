@@ -67,10 +67,10 @@ module Api
             sinopse: html.css('.linha2 .boxpreto1 .coluna2 p')[0].text.gsub('[saiba mais]', '').strip,
             cast: html.css('.linha2 .boxpreto1 .coluna2 p')[1].text.gsub(/[\r\n]/, '').gsub(',', ', '),
             director: html.css('.linha2 .boxpreto1 .coluna2 p')[2].text,
-            hours: []
+            cities: []
           }
 
-          hours = []
+          cities = []
 
           city_flag = ''
           movie_theater_flag = ''
@@ -86,27 +86,33 @@ module Api
               sessions = [] if movie_theater_flag != movie_theater_name
               movie_theaters = [] if city_flag != city_name
 
-              line.css('td')[3].text.split(',').each do |session|
+              
                 subtitled = line.css('td')[3].text.include?('Leg') ? true : false
                 dubbed = line.css('td')[3].text.include?('Dub') ? true : false
                 macroxe = line.css('.icomacroxe')[0] ? true : false
                 vip = line.css('.icovip')[0] ? true : false
                 i4dx = line.css('.ico4dx')[0] ? true : false
                 i2d = line.css('.ico2d')[0] ? true : false
+
+                hours = []
+
+                line.css('td')[3].text.gsub(/[LegDub.-]/, '').strip.split(',').each do |hour|
+                  hours << hour.gsub(/[ABCD]/, '').strip
+                end
                 
                 session = {
                   room: line.css('td')[2].text,
                   subtitled: subtitled,
                   dubbed: dubbed,
-                  hour: session.gsub('Leg. - ', '').gsub('Dub. - ', '').gsub(/[DABC]/, '').strip,
                   macroxe: macroxe,
                   vip: vip,
                   '4dx': i4dx,
-                  '2d': i2d
+                  '2d': i2d,
+                  hours:  hours
                 }
 
                 sessions << session
-              end
+              
 
               movie_theater = {
                 name: movie_theater_name,
@@ -115,19 +121,19 @@ module Api
 
               movie_theaters << movie_theater if movie_theater_flag != movie_theater_name
 
-              hour = {
+              city = {
                 city: city_name,
                 movie_theaters: movie_theaters
               }
 
-              hours << hour if city_flag != city_name
+              cities << city if city_flag != city_name
 
               city_flag = city_name
               movie_theater_flag = movie_theater_name
             end
           end
 
-          movie[:hours] = hours
+          movie[:cities] = cities
 
           return movie
         end
