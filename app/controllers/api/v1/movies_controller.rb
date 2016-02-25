@@ -52,15 +52,18 @@ module Api
         # For show action
         def parse_movie(movie_id)
           html = Nokogiri::HTML(open("http://www.cinepolis.com.br/programacao/busca.php?cf=#{movie_id}"))
+          htmlTrailer = Nokogiri::HTML(open("http://www.cinepolis.com.br/trailers/trailer_modal.php?cfm=#{movie_id}"))
 
           if html.css('.linha2 .boxpreto1 .coluna1 img')[0] == nil
             return false
           end
 
+
           # Movie general info
           movie = {
             id: movie_id,
             image: html.css('.linha2 .boxpreto1 .coluna1 img')[0].attr('src'),
+            trailer: "#{request.protocol.gsub('//', '')}#{htmlTrailer.css('iframe').first.attr('src')}",
             name: html.css('.titulo h3').text,
             original_name: html.css('.titulo .cinza .esquerda').text.gsub(/[()]/, ''),
             pg: html.css('.titulo span img')[0].attr('title').gsub('Classificação:', '').gsub('ANOS', '').strip,
