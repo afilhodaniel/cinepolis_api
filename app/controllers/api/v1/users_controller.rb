@@ -1,7 +1,6 @@
 module Api
   module V1
     class UsersController < BaseController
-      skip_before_action :force_authentication, only: [:create]
 
       private
 

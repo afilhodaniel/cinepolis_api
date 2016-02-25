@@ -1,6 +1,5 @@
 class SessionsController < ApplicationController
-  skip_before_action :force_authentication, only: [:unauthenticated, :signin]
-
+  
   def unauthenticated
     render :unauthenticated
   end

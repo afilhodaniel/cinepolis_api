@@ -1,8 +1,7 @@
 module Api
   module V1
     class CitiesController < BaseController
-      skip_before_action :force_authentication, only: [:create]
-
+      
       def index
         @cities = parse_cities()
       end
