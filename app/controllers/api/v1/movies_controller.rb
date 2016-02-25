@@ -86,36 +86,36 @@ module Api
               sessions = [] if movie_theater_flag != movie_theater_name
               movie_theaters = [] if city_flag != city_name
 
+              movie_theater_id = line.css('td')[0].css('a').last.attr('href').split('?cc=')[1].split('&cf=')[0]
+              subtitled = line.css('td')[3].text.include?('Leg') ? true : false
+              dubbed = line.css('td')[3].text.include?('Dub') ? true : false
+              macroxe = line.css('.icomacroxe')[0] ? true : false
+              vip = line.css('.icovip')[0] ? true : false
+              i4dx = line.css('.ico4dx')[0] ? true : false
+              i2d = line.css('.ico2d')[0] ? true : false
+
+              hours = []
+
+              line.css('td')[3].text.gsub(/[LegDub.-]/, '').strip.split(',').each do |hour|
+                hours << hour.gsub(/[ABCD]/, '').strip
+              end
               
-                subtitled = line.css('td')[3].text.include?('Leg') ? true : false
-                dubbed = line.css('td')[3].text.include?('Dub') ? true : false
-                macroxe = line.css('.icomacroxe')[0] ? true : false
-                vip = line.css('.icovip')[0] ? true : false
-                i4dx = line.css('.ico4dx')[0] ? true : false
-                i2d = line.css('.ico2d')[0] ? true : false
+              session = {
+                room: line.css('td')[2].text,
+                subtitled: subtitled,
+                dubbed: dubbed,
+                macroxe: macroxe,
+                vip: vip,
+                '4dx': i4dx,
+                '2d': i2d,
+                hours:  hours
+              }
 
-                hours = []
-
-                line.css('td')[3].text.gsub(/[LegDub.-]/, '').strip.split(',').each do |hour|
-                  hours << hour.gsub(/[ABCD]/, '').strip
-                end
-                
-                session = {
-                  room: line.css('td')[2].text,
-                  subtitled: subtitled,
-                  dubbed: dubbed,
-                  macroxe: macroxe,
-                  vip: vip,
-                  '4dx': i4dx,
-                  '2d': i2d,
-                  hours:  hours
-                }
-
-                sessions << session
-              
+              sessions << session
 
               movie_theater = {
                 name: movie_theater_name,
+                url: "#{request.protocol}#{request.host}:#{request.port}#{api_v1_movie_theater_path(movie_theater_id.to_i, format: :json)}",
                 sessions: sessions
               }
 
