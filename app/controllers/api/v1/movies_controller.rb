@@ -97,6 +97,9 @@ module Api
               i4dx = line.css('.ico4dx')[0] ? true : false
               i2d = line.css('.ico2d')[0] ? true : false
               i3d = line.css('.ico3d')[0] ? true : false
+              imax = line.css('.icoimax')[0] ? true : false
+              cocacola4dx = line.css('.ico4dxcoca')[0] ? true : false
+              santander = line.css('.icoSantander')[0] ? true : false
 
               hours = []
 
@@ -113,6 +116,9 @@ module Api
                 '4dx': i4dx,
                 '2d': i2d,
                 '3d': i3d,
+                imax: imax,
+                cocacola4dx: cocacola4dx,
+                santander: santander,
                 hours:  hours
               }
 
