@@ -79,7 +79,8 @@ module Api
           movie_theater = {
             name: html.css('.titulo .amarelo')[0].text,
             city: html.css('.titulo .cinza .esquerda')[0].text,
-            weeks: []
+            weeks: [],
+            prices: []
           }
 
           weeks = []
@@ -105,8 +106,6 @@ module Api
             leg_h = legs.size >= 9 ? " - #{legs[8].gsub('I', '').strip}" : nil
             leg_i = legs.size >= 10 ? " - #{legs[9].gsub('J', '').strip}" : nil
             leg_j = legs.size >= 11 ? " - #{legs[10].gsub('L', '').strip}" : nil
-
-            puts leg_d
 
             html.css("#{item.css('a')[0].attr('href')} tr").each do |line|
               if line.attr('bgcolor') == '#990000'
@@ -170,7 +169,18 @@ module Api
             weeks << week
           end
 
+          prices = []
+
+          html.css('#abaprc').to_s.split('<br>').each do |price|
+            price = price.gsub("<div id=\"abaprc\" class=\"contaba clearfix\">", '')
+            price = price.gsub('<i>', '').gsub('</i>', '')
+            price = price[0, price.index("<div class=\"linha2\"></div>")] if price.include?("<div class=\"linha2\"></div>")
+
+            prices << price.strip
+          end
+
           movie_theater[:weeks] = weeks
+          movie_theater[:prices] = prices
 
           return movie_theater
         end
