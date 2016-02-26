@@ -98,13 +98,17 @@ module Api
                 movie_id = line.css('td')[1].css('a').last.attr('href').to_s.split('?cf=')[1].to_s.split('&cc=')[0]
                 subtitled = line.css('td')[4].text.include?('Leg') ? true : false
                 dubbed = line.css('td')[4].text.include?('Dub') ? true : false
+                vip = line.css('.icovip')[0] ? true : false
+                macroxe = line.css('.icomacroxe')[0] ? true : false
+                i3d = line.css('.ico3d')[0] ? true : false
+                i4dx = line.css('.ico4dx')[0] ? true : false
+                i2d = line.css('.ico2d')[0] ? true : false
 
                 hours = []
 
                 line.css('td')[4].text.split(',').each do |option|
                   hours << option.gsub(/[Leg,Dub,-,.,A]/, '').gsub('-', '').gsub(' ', '')
                 end
-
 
                 session = {
                   room: line.css('td')[0].text,
@@ -115,6 +119,11 @@ module Api
                     subtitled: subtitled,
                     dubbed: dubbed
                   },
+                  macroxe: macroxe,
+                  vip: vip,
+                  '3d': i3d,
+                  '4dx': i4dx,
+                  '2d': i2d,
                   hours: hours
                 }
 

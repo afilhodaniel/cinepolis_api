@@ -96,6 +96,7 @@ module Api
               vip = line.css('.icovip')[0] ? true : false
               i4dx = line.css('.ico4dx')[0] ? true : false
               i2d = line.css('.ico2d')[0] ? true : false
+              i3d = line.css('.ico3d')[0] ? true : false
 
               hours = []
 
@@ -111,6 +112,7 @@ module Api
                 vip: vip,
                 '4dx': i4dx,
                 '2d': i2d,
+                '3d': i3d,
                 hours:  hours
               }
 
