@@ -93,6 +93,21 @@ module Api
               sessions: []
             }
 
+            legs = html.css("#{item.css('a')[0].attr('href')} .tabelahorarios tfoot tr td[class=ft10]")[0].text.split('-')
+
+            leg_a = legs.size >= 2 ? " - #{legs[1].gsub('B', '').strip}" : nil
+            leg_b = legs.size >= 3 ? " - #{legs[2].gsub('C', '').strip}" : nil
+            leg_c = legs.size >= 4 ? " - #{legs[3].gsub('D', '').strip}" : nil
+            leg_d = legs.size >= 5 ? " - #{legs[4].gsub('E', '').strip}" : nil
+            leg_e = legs.size >= 6 ? " - #{legs[5].gsub('F', '').strip}" : nil
+            leg_f = legs.size >= 7 ? " - #{legs[6].gsub('G', '').strip}" : nil
+            leg_g = legs.size >= 8 ? " - #{legs[7].gsub('H', '').strip}" : nil
+            leg_h = legs.size >= 9 ? " - #{legs[8].gsub('I', '').strip}" : nil
+            leg_i = legs.size >= 10 ? " - #{legs[9].gsub('J', '').strip}" : nil
+            leg_j = legs.size >= 11 ? " - #{legs[10].gsub('L', '').strip}" : nil
+
+            puts leg_d
+
             html.css("#{item.css('a')[0].attr('href')} tr").each do |line|
               if line.attr('bgcolor') == '#990000'
                 movie_id = line.css('td')[1].css('a').last.attr('href').to_s.split('?cf=')[1].to_s.split('&cc=')[0]
@@ -107,7 +122,20 @@ module Api
                 hours = []
 
                 line.css('td')[4].text.split(',').each do |option|
-                  hours << option.gsub(/[Leg,Dub,-,.,A]/, '').gsub('-', '').gsub(' ', '')
+                  option = option.gsub('Leg', '').gsub('Dub', '').gsub(/[\.-]/, '').strip
+                  
+                  option = option.gsub('A', leg_a) if leg_a
+                  option = option.gsub('B', leg_b) if leg_b
+                  option = option.gsub('C', leg_c) if leg_c
+                  option = option.gsub('D', leg_d) if leg_d
+                  option = option.gsub('E', leg_e) if leg_e
+                  option = option.gsub('F', leg_f) if leg_f
+                  option = option.gsub('G', leg_g) if leg_g
+                  option = option.gsub('H', leg_h) if leg_h
+                  option = option.gsub('I', leg_i) if leg_i
+                  option = option.gsub('J', leg_j) if leg_j
+
+                  hours << option
                 end
 
                 session = {
