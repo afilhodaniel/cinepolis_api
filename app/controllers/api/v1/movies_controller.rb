@@ -125,6 +125,7 @@ module Api
               sessions << session
 
               movie_theater = {
+                id: movie_theater_id,
                 name: movie_theater_name,
                 url: "#{request.protocol}#{request.host}:#{request.port}#{api_v1_movie_theater_path(movie_theater_id.to_i, format: :json)}",
                 sessions: sessions
@@ -133,8 +134,15 @@ module Api
               movie_theaters << movie_theater if movie_theater_flag != movie_theater_name
 
               city = {
-                city: city_name,
-                movie_theaters: movie_theaters
+                city: {
+                  name: city_name.split('-')[0].strip,
+                  state: {
+                    uf: city_name.split('-')[1].strip,
+                    name: State::UFS[city_name.split('-')[1].strip.to_sym],
+                    url: "#{request.protocol}#{request.host}:#{request.port}#{api_v1_state_path(city_name.split('-')[1].strip.downcase, format: :json)}"
+                  },
+                  movie_theaters: movie_theaters
+                }
               }
 
               cities << city if city_flag != city_name

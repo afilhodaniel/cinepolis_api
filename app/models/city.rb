@@ -1,2 +1,2 @@
-class Movie < ActiveRecord::Base
+class City < ActiveRecord::Base
 end

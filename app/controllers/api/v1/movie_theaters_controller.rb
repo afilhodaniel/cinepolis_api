@@ -8,7 +8,19 @@ module Api
       end
 
       def show
-        @movie_theater = parse_movie_theater(params[:id])
+        movie_theater = parse_movie_theater(params[:id])
+
+        unless movie_theater
+          @errors = {
+            movie_theater: 'Movie theater doesn\'t exists'
+          }
+
+          respond_to do |format|
+            format.json { render :error }
+          end
+        else
+          @movie_theater = movie_theater
+        end
       end
 
       private
@@ -54,14 +66,23 @@ module Api
 
             html.css('option').each do |option|
               if option.attr('value') != '0'
+                city_name = city[:name].split('-')[0].strip
+                state_uf = city[:name].split('-')[1].strip
+
                 movie_theater = {
                   id: option.attr('value'),
                   name: option.text,
+                  url: "#{request.protocol}#{request.host}:#{request.port}#{api_v1_movie_theater_path(option.attr('value'), format: :json)}",
                   city: {
                     id: city[:id],
-                    name: city[:name]
-                  },
-                  url: "#{request.protocol}#{request.host}:#{request.port}#{api_v1_movie_theater_path(option.attr('value'), format: :json)}"
+                    name: city_name,
+                    url: "#{request.protocol}#{request.host}:#{request.port}#{api_v1_city_path(city[:id], format: :json)}",
+                    state: {
+                      uf: state_uf,
+                      name: State::UFS[state_uf.to_sym],
+                      url: "#{request.protocol}#{request.host}:#{request.port}#{api_v1_state_path(state_uf.downcase, format: :json)}"
+                    }
+                  }
                 }
 
                 movie_theaters << movie_theater
@@ -76,9 +97,21 @@ module Api
         def parse_movie_theater(movie_theater_id)
           html = Nokogiri::HTML(open("http://www.cinepolis.com.br/programacao/cinema.php?cc=#{movie_theater_id}"))
 
+          unless html.css('.titulo .cinza .esquerda')[0].text.split('-')[0]
+            return false
+          end
+
           movie_theater = {
+            id: movie_theater_id,
             name: html.css('.titulo .amarelo')[0].text,
-            city: html.css('.titulo .cinza .esquerda')[0].text,
+            city: {
+              name: html.css('.titulo .cinza .esquerda')[0].text.split('-')[0].strip,
+              state: {
+                uf: html.css('.titulo .cinza .esquerda')[0].text.split('-')[1].strip,
+                name: State::UFS[html.css('.titulo .cinza .esquerda')[0].text.split('-')[1].strip.to_sym],
+                url: "#{request.protocol}#{request.host}:#{request.port}#{api_v1_state_path(html.css('.titulo .cinza .esquerda')[0].text.split('-')[1].strip.downcase, format: :json)}"
+              }
+            },
             weeks: [],
             prices: []
           }
