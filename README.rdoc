@@ -23,6 +23,59 @@ Instale as dependências necessárias:
 
 === Requisições
 
+* GET /api/v1/states.json
+* GET /api/v1/states/:uf.json
+* GET /api/v1/cities.json
+* GET /api/v1/cities/:id.json
+* GET /api/v1/movie_theaters.json
+* GET /api/v1/movie_theaters/:id.json
+* GET /api/v1/movies.json
+* GET /api/v1/movies/:id.json
+
+<b>GET /api/v1/states.json</b>
+
+Retorna um JSON com todos os estados e suas cidades. Exemplo:
+
+  {
+    states: [
+      {
+        uf: "AM",
+        name: "Amazonas",
+        url: "http://cinepolisapi.herokuapp.com:80/api/v1/states/am.json",
+        cities: [
+          {
+            id: "29",
+            name: "Manaus",
+            url: "http://cinepolisapi.herokuapp.com:80/api/v1/cities/29.json"
+          },
+          ...
+        ]
+      },
+      ...
+    ]
+  }
+
+<b>GET /api/v1/states/am.json</b>
+
+Retorna um JSON com todas as cidades do estado requisitado. Exemplo:
+
+  {
+    success: true,
+    state: {
+      uf: "AM",
+      name: "Amazonas",
+      url: "http://cinepolisapi.herokuapp.com:80/api/v1/states/am.json",
+      cities: [
+        {
+          id: "29",
+          name: "Manaus",
+          url: "http://cinepolisapi.herokuapp.com:80/api/v1/cities/29.json",
+        },
+        ...
+      ]
+    }
+  }
+
 <b>GET /api/v1/cities.json</b>
 
 Retorna um JSON com todas as cidades e suas unidades de cinema. Exemplo:
@@ -32,6 +85,12 @@ Retorna um JSON com todas as cidades e suas unidades de cinema. Exemplo:
       {
         id: "8",
         name: "Barueri - SP",
+        url: "http://cinepolisapi.herokuapp.com:80/api/v1/cities/8.json",
+        state: {
+          uf: "SP",
+          name: "São Paulo",
+          url: "http://cinepolisapi.herokuapp.com:80/api/v1/states/sp.json"
+        },
         movie_theaters: [
           {
             id: "8",
@@ -47,6 +106,32 @@ Retorna um JSON com todas as cidades e suas unidades de cinema. Exemplo:
       },
       ...
     ]
+  }
+
+<b>GET /api/v1/cities/8.json</b>
+
+Retorna um JSON com todas as informações sobre a cidade requisitada e todas as suas unidades de cinema. Exemplo:
+
+  {
+    success: true,
+    city: {
+      id: "8",
+      name: "Barueri",
+      url: "http://cinepolisapi.herokuapp.com:80/api/v1/cities/8.json",
+      state: {
+        uf: "SP",
+        name: "São Paulo",
+        url: "http://cinepolisapi.herokuapp.com:80/api/v1/states/sp.json"
+      },
+      movie_theaters: [
+        {
+          id: "8",
+          name: "Cinépolis Iguatemi Alphaville",
+          url: "http://cinepolisapi.herokuapp.com:80/api/v1/movie_theaters/8.json"
+        },
+        ...
+      ]
+    }
   }
 
 <b>GET /api/v1/movie_theaters.json</b>
@@ -181,6 +266,17 @@ Retorna um JSON com todas as informações sobre o filme em questão e a program
         },
         ...
       ]
+    }
+  }
+
+<b>404</b>
+
+No caso de você solicitar algum recurso que não existe, a API retornará algo como isso:
+
+  {
+    success: false,
+    errors: {
+      movie: "Movie doesn't exists"
     }
   }
 
