@@ -1,2 +1,3 @@
-class City < ActiveRecord::Base
+class City
+  include ActiveModel
 end

@@ -1,2 +1,3 @@
-class Movie < ActiveRecord::Base
+class Movie
+  include ActiveModel
 end

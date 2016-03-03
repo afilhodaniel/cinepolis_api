@@ -1,4 +1,5 @@
-class State < ActiveRecord::Base
+class State
+  include ActiveModel
 
   UFS = {
     :AM => 'Amazonas',

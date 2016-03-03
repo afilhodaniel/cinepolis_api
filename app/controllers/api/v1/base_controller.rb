@@ -4,6 +4,7 @@ module Api
 			protect_from_forgery with: :null_session
 
       before_action :set_resource, only: [:show, :update, :destroy]
+      before_action :set_parser, only: [:index, :show]
 
       def index
         resources_name = "@#{resource_name.pluralize}"
@@ -100,6 +101,10 @@ module Api
 
         def set_errors
           instance_variable_set("@errors", get_resource.errors)
+        end
+
+        def set_parser
+          instance_variable_set("@parser", "#{controller_name.split('_').map(&:capitalize).join('')}Parser".constantize.new(request))
         end
 
 		end
