@@ -280,6 +280,12 @@ No caso de você solicitar algum recurso que não existe, a API retornará algo 
     }
   }
 
+=== Outros Projetos
+
+Também fiz outros projetos de API de outros cinemas. Todos seguem exatamente (ou quase) a mesma estrutura. Confira nos links abaixo:
+
+<b>Cinspaço API:</b> {https://github.com/afilhodaniel/cinespaco_api}[https://github.com/afilhodaniel/cinespaco_api]
+
 === Observações
 
 1. Você pode usar este projeto como bem entender. Mas sugiro não usar o deploy do Heroku citado mais acima. Trata-se de um deploy que eu fiz apenas para demonstrar o funcionamento da API. Faça seu próprio deploy, em um servidor profissional.
