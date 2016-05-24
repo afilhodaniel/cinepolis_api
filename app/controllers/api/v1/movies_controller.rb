@@ -22,26 +22,19 @@ module Api
           @movie = movie
 
           cities = []
-          to_delete = []
+          movie_theaters = []
 
           if query_params[:movie_theater_id]
             movie[:cities].each do |city|
               city[:city][:movie_theaters].each do |movie_theater|
                 if movie_theater[:id] == query_params[:movie_theater_id]
                   cities << city
-                else
-                  to_delete << movie_theater
+                  movie_theaters << movie_theater
                 end
               end
             end
 
-            cities.each do |city|
-              city[:city][:movie_theaters].each do |movie_theater|
-                if to_delete.include?(movie_theater)
-                  city[:city][:movie_theaters].delete(movie_theater)
-                end
-              end
-            end
+            cities[0][:city][:movie_theaters] = movie_theaters
 
             @movie[:cities] = cities
           end
