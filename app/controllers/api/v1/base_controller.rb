@@ -5,6 +5,7 @@ module Api
 
       before_action :set_resource, only: [:show, :update, :destroy]
       before_action :set_parser, only: [:index, :show]
+      before_action :verify_access_token
 
       def index
         resources_name = "@#{resource_name.pluralize}"
@@ -105,6 +106,12 @@ module Api
 
         def set_parser
           instance_variable_set("@parser", "#{controller_name.split('_').map(&:capitalize).join('')}Parser".constantize.new(request))
+        end
+
+        def verify_access_token
+          access_token = params[:access_token]
+
+          redirect_to sessions_unauthenticated_path(format: :json) unless User.where(access_token: access_token).first
         end
 
 		end
