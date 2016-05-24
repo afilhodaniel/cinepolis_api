@@ -163,6 +163,7 @@ class MovieTheatersParser < BaseParser
 
     movie_theater[:weeks] = weeks
     movie_theater[:prices] = prices
+    movie_theater[:movies] = get_movies(movie_theater[:id])
 
     return movie_theater
   end
