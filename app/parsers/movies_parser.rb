@@ -70,13 +70,19 @@ class MoviesParser < BaseParser
         imax = line.css('.icoimax')[0] ? true : false
         cocacola4dx = line.css('.ico4dxcoca')[0] ? true : false
         santander = line.css('.icoSantander')[0] ? true : false
-
+        
         hours = []
 
-        line.css('td')[3].text.gsub(/[LegDub.-]/, '').strip.split(',').each do |hour|
-          hours << hour.gsub(/[ABCD]/, '').strip
+        if line.css('td')[3].css('.hint--top')[0]
+          line.css('td')[3].text.gsub(/[LegDub.-]/, '').strip.split(',').each do |hour|
+            hours << hour.sub(line.css('td')[3].css('.hint--top')[0].css('.hleter').text, " #{line.css('td')[3].css('.hint--top')[0].attr('data-hint')}").strip
+          end
+        else
+          line.css('td')[3].text.gsub(/[LegDub.-]/, '').strip.split(',').each do |hour|
+            hours << hour.strip
+          end
         end
-        
+
         session = {
           room: line.css('td')[2].text,
           subtitled: subtitled,
