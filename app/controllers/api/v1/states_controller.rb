@@ -15,6 +15,12 @@ module Api
         end
 
         if @state
+          @state[:cities].each do |city|
+            city_parser = CitiesParser.new(request)
+
+            city[:movie_theaters] = city_parser.get_city(city[:id])[:movie_theaters]
+          end
+
           return @state
         else
           @errors = {

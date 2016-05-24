@@ -37,7 +37,11 @@ class StatesParser < BaseParser
       end
     end
 
-    return states
+    states.each do |state|
+      state[:cities].sort_by {|city| city[:name]}
+    end
+
+    return states.sort_by {|state| state[:uf]}
   end
 
 end

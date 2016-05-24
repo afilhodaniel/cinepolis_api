@@ -98,7 +98,7 @@ class CitiesParser < BaseParser
         end
       end
 
-      return movie_theaters
+      return movie_theaters.sort_by {|movie_theater| movie_theater[:name]}
     end
 
 end
