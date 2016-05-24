@@ -20,6 +20,12 @@ module Api
           end
         else
           @city = city
+
+          movie_theaters_parser = MovieTheatersParser.new(request)
+
+          @city[:movie_theaters].each do |movie_theater|
+            movie_theater[:movies] = movie_theaters_parser.get_movies(movie_theater[:id])
+          end
         end
       end
 

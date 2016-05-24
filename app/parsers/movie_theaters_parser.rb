@@ -167,6 +167,34 @@ class MovieTheatersParser < BaseParser
     return movie_theater
   end
 
+  def get_movies(movie_theater_id)
+    url = 'http://www.cinepolis.com.br/includes/getFilme.php'
+
+    movies = []
+
+    response = HTTParty.post(url, {
+      body: {
+        type: 1,
+        cinema: movie_theater_id
+      }
+    })
+
+    html = Nokogiri::HTML(response)
+
+    html.css('option').each do |option|
+      if option.attr('value') != '0'
+        movie = {
+          id: option.attr('value'),
+          name: option.text
+        }
+
+        movies << movie
+      end
+    end
+
+    return movies.sort_by {|movie| movie[:name]}
+  end
+
   private 
 
     def parse_cities
