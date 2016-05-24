@@ -28,6 +28,7 @@ class MoviesParser < BaseParser
       return false
     end
 
+    programming = html.css('.tabNavigation.black .direita.branco.black').text.split('-')[1].strip
 
     # Movie general info
     movie = {
@@ -104,6 +105,7 @@ class MoviesParser < BaseParser
           id: movie_theater_id,
           name: movie_theater_name,
           url: "#{@request.protocol}#{@request.host}:#{@request.port}#{api_v1_movie_theater_path(movie_theater_id.to_i, format: :json)}",
+          programming: programming,
           sessions: sessions
         }
 
