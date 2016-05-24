@@ -28,8 +28,11 @@ class StatesParser < BaseParser
             city = {
               id: option.attr('value'),
               name: city,
-              url: "#{@request.protocol}#{@request.host}:#{@request.port}#{api_v1_city_path(option.attr('value'), format: :json)}"
+              url: "#{@request.protocol}#{@request.host}:#{@request.port}#{api_v1_city_path(option.attr('value'), format: :json)}",
+              movie_theaters: []
             }
+
+            city[:movie_theaters] << get_movie_theaters(city[:id])
 
             state[:cities] << city
           end
@@ -38,6 +41,35 @@ class StatesParser < BaseParser
     end
 
     return states
+  end
+
+  def get_movie_theaters(city_id)
+    url = 'http://www.cinepolis.com.br/includes/getCinema.php'
+
+    movie_theaters = []
+
+    
+    response = HTTParty.post(url, {
+      body: {
+        cidade: city_id
+      }
+    })
+
+    html = Nokogiri::HTML(response)
+
+    html.css('option').each do |option|
+      if option.attr('value') != '0'
+        movie_theater = {
+          id: option.attr('value'),
+          name: option.text,
+          url: "#{@request.protocol}#{@request.host}:#{@request.port}#{api_v1_movie_theater_path(option.attr('value'), format: :json)}"
+        }
+
+        movie_theaters << movie_theater
+      end
+    end
+
+    return movie_theaters
   end
 
 end
