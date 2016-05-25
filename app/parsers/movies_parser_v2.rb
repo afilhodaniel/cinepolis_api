@@ -41,7 +41,6 @@ class MoviesParserV2 < BaseParser
               '3d': html.css('td')[0].css('.ico3d')[0] ? true : false,
               macroxe: html.css('td')[0].css('.icomacroxe')[0] ? true : false,
               dubbed: html.css('td')[3].text.include?('Dub') ? true : false,
-              hints: [],
               hours: []
             }
 
