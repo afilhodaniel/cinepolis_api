@@ -5,7 +5,7 @@ module Api
 
       before_action :set_resource, only: [:show, :update, :destroy]
       before_action :set_parser, only: [:index, :show]
-      # before_action :verify_access_token
+      before_action :verify_access_token
 
       def index
         resources_name = "@#{resource_name.pluralize}"
