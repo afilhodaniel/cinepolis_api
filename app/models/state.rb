@@ -2,26 +2,33 @@ class State
   include ActiveModel
 
   UFS = {
-    :AM => 'Amazonas',
+    :AC => 'Acre',
+    :AL => 'Alagoas',
     :AP => 'Amapá',
+    :AM => 'Amazonas',
     :BA => 'Bahia',
     :CE => 'Ceará',
+    :DF => 'Distrito Federal',
     :ES => 'Espírito Santo',
     :GO => 'Goiás',
     :MA => 'Maranhão',
-    :MG => 'Minas Gerais',
-    :MS => 'Mato Grosso do Sul',
     :MT => 'Mato Grosso',
+    :MS => 'Mato Grosso do Sul',
+    :MG => 'Minas Gerais',
     :PA => 'Pará',
     :PB => 'Paraíba',
-    :PI => 'Piauí',
-    :PE => 'Pernambuco',
     :PR => 'Paraná',
-    :RN => 'Rio Grande do Norte',
+    :PE => 'Pernambuco',
+    :PI => 'Piauí',
     :RJ => 'Rio de Janeiro',
+    :RN => 'Rio Grande do Norte',
     :RS => 'Rio Grande do Sul',
+    :RO => 'Rondônia',
+    :RR => 'Roraima',
     :SC => 'Santa Catarina',
-    :SP => 'São Paulo'
+    :SP => 'São Paulo',
+    :SE => 'Sergipe',
+    :TO => 'Tocantins'
   }
 
 end

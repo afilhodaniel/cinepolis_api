@@ -8,11 +8,9 @@ Rails.application.routes.draw do
   end
 
   namespace :api do
-    namespace :v1 do
-      resources :states, onlt: [:index, :show]
-      resources :cities, only: [:index, :show]
-      resources :movies, only: [:index, :show]
-      resources :movie_theaters, only: [:index, :show]
+    namespace :v2 do
+      resources :search, only: [:index]
+      resources :movies, only: [:show]
     end
   end
 end
