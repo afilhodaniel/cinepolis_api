@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v2 do
+      resources :users,  only: [:create]
       resources :search, only: [:index]
       resources :movies, only: [:show]
     end
