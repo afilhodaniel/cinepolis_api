@@ -39,7 +39,12 @@ class MoviesParserV2 < BaseParser
               subtitled: html.css('td')[3].text.include?('Leg') ? true : false,
               vip: html.css('td')[0].css('.icovip')[0] ? true : false,
               '3d': html.css('td')[0].css('.ico3d')[0] ? true : false,
+              'i4dx': html.css('td')[0].css('.ico4dx')[0] ? true : false,
+              'i4dxcoca': html.css('td')[0].css('.ico4dxcoca')[0] ? true : false,
+              santander: html.css('td')[0].css('.icoSantander')[0] ? true : false,
+              atmos: html.css('td')[0].css('.icodolby')[0] ? true : false,
               macroxe: html.css('td')[0].css('.icomacroxe')[0] ? true : false,
+              imax: html.css('td')[0].css('.icoimax')[0] ? true : false,
               dubbed: html.css('td')[3].text.include?('Dub') ? true : false,
               hours: []
             }
