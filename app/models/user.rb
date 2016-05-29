@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  attr_accessor :name, :email, :password, :facebook_id, :facebook_access_token
-
   before_create :generate_access_token
 
   before_save :encrypt_password
