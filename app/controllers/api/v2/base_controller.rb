@@ -111,7 +111,9 @@ module Api
         def verify_access_token
           access_token = params[:access_token]
 
-          redirect_to sessions_unauthenticated_path(format: :json) unless User.where(access_token: access_token).first
+          unless params[:email] and params[:email] != nil
+            redirect_to sessions_unauthenticated_path(format: :json) unless User.where(access_token: access_token).first
+          end
         end
 
 		end
